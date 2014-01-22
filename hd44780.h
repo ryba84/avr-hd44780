@@ -1,14 +1,12 @@
 //=================================================================
-// biblioteka do obslugi wyswietlacza hd44780 w trybie
-// 4-bit z obsluga flagi zajetosci
-// wymagania co do pinow:
-// *na port danych nalezy wybrac starsza lub mlodsza polowke portu
-// *piny sterujace wyswietlaczem musza byc na jednym porcie
+// ryba.lodz@gmail.com
+// AVR library for hd44780
+// 4-bit with busy flag read
 //=================================================================
 #include <avr/io.h>
 #include <util/delay.h>
 //=================================================================
-// konfiguracja pinow do obslugi wyswietlacza
+// pin config
 //=================================================================
 #define LCD_CONTROL_PORT D
 #define LCD_RS (1<<PD5)
@@ -17,7 +15,7 @@
 #define	LCD_DATA_PORT B
 #define LCD_DATA_MASK 0xf0
 //=================================================================
-// definicja komend wyswietlacza
+// LCD commands
 //=================================================================
 #define clearDisplay			0x01
 #define returnHome				0x02
@@ -42,17 +40,17 @@
 	#define firstLine			0x00
 	#define secondLine			0x40
 //=================================================================
-// definicje funkcji
+// functions
 //=================================================================
-unsigned char lcdIsBusy(void);// sprawdzenie gotowosci wyswietlacza LCD zwraca 1 gdy zajety
-unsigned char lcdReadData();// odczyt danych z RAM wyswietlacza
-unsigned char lcdRead();// odczyt bajtu
-unsigned char lcdReadNibble();// odczyt polbajtu
-void lcdSend(unsigned char dataToSend);// wysyla znak do lcd
-void lcdSendNibble(unsigned char data);// wysyla polbajt do lcd
-void lcdSendCommand(unsigned char data);// wysyla komende do wyswietlacza
-void lcdSendChar(unsigned char charToSend);// wysyla znak do wyswietlacza
-void lcdInit(void);// inicjalizacja wyswietlacza
+unsigned char lcdIsBusy(void);
+unsigned char lcdReadData();
+unsigned char lcdRead();
+unsigned char lcdReadNibble();
+void lcdSend(unsigned char dataToSend);
+void lcdSendNibble(unsigned char data);
+void lcdSendCommand(unsigned char data);
+void lcdSendChar(unsigned char charToSend);
+void lcdInit(void);
 //=================================================================
-// koniec pliku
+// EOF
 //=================================================================

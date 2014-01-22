@@ -36,8 +36,8 @@ void lcdSend(unsigned char dataToSend)
 {
 	DDR(LCD_DATA_PORT) |= LCD_DATA_MASK;
 	PORT(LCD_CONTROL_PORT) &= ~LCD_RW;
-	lcdSendNibble (dataToSend & LCD_DATA_MASK);// starszy polbajt
-	lcdSendNibble ((dataToSend << 4) & LCD_DATA_MASK);// mlodszy polbajt
+	lcdSendNibble (dataToSend & LCD_DATA_MASK);
+	lcdSendNibble ((dataToSend << 4) & LCD_DATA_MASK);
 }
 
 void lcdSendNibble(unsigned char data)
@@ -63,11 +63,11 @@ void lcdSendChar(unsigned char charToSend)
 void lcdInit(void)
 {
 	unsigned char cnt;
-	DDR(LCD_CONTROL_PORT) |= LCD_E | LCD_RS | LCD_RS; // linie sterujace wyswietlaczem jako wyjscie
-	DDR(LCD_DATA_PORT) |= LCD_DATA_MASK; // starszy polbajt portu B jako wyjscie
-	_delay_ms(15); // oczekiwanie na ustabilizowanie zasilania wyswietlacza
+	DDR(LCD_CONTROL_PORT) |= LCD_E | LCD_RS | LCD_RS;
+	DDR(LCD_DATA_PORT) |= LCD_DATA_MASK;
+	_delay_ms(15);
 
-	PORT(LCD_CONTROL_PORT) &= ~(LCD_E | LCD_RW | LCD_RS); // zerowanie linii sterujacych
+	PORT(LCD_CONTROL_PORT) &= ~(LCD_E | LCD_RW | LCD_RS);
 	for (cnt = 0; cnt < 3; cnt++)
 	{
 		PORT(LCD_CONTROL_PORT) |= LCD_E;
@@ -77,13 +77,13 @@ void lcdInit(void)
 		_delay_ms (5);
 	}
 	_delay_ms(1);
-	lcdSendCommand(functionSet | !interface8bit | display2lines);// interfejs 4-bit, 2 linie, fonty 5x7
+	lcdSendCommand(functionSet | !interface8bit | display2lines);
 	while (lcdIsBusy());
-	lcdSendCommand(displayOnOff | !displayOn);// wylaczenie wyswietlacza
+	lcdSendCommand(displayOnOff | !displayOn);
 	while (lcdIsBusy());
-	lcdSendCommand(clearDisplay);// czyszczenie wyswietlacza
+	lcdSendCommand(clearDisplay);
 	while (lcdIsBusy());
-	lcdSendCommand(entryModeSet | cursorIncrement);// kursor przesuwa sie w prawo
+	lcdSendCommand(entryModeSet | cursorIncrement);
 	while (lcdIsBusy());
-	lcdSendCommand(displayOnOff | displayOn | !cursorOn | !cursorBlink);// wlaczenie wyswietlacza, wylaczenie kursora i migania
+	lcdSendCommand(displayOnOff | displayOn | !cursorOn | !cursorBlink);
 }
