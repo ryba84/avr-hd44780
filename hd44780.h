@@ -1,12 +1,12 @@
 //=================================================================
+// AVR library for hd44780 compatible LCD display
 // ryba.lodz@gmail.com
-// AVR library for hd44780
 // 4-bit with busy flag read
 //=================================================================
 #include <avr/io.h>
 #include <util/delay.h>
 //=================================================================
-// pin config
+// port & pin config
 //=================================================================
 #define LCD_CONTROL_PORT D
 #define LCD_RS (1<<PD5)
@@ -14,6 +14,16 @@
 #define LCD_RW (1<<PD7)
 #define	LCD_DATA_PORT B
 #define LCD_DATA_MASK 0xf0
+//=================================================================
+// other needed definitions
+//=================================================================
+#define PORT_(port) PORT ## port
+#define DDR_(port)  DDR  ## port
+#define PIN_(port)  PIN  ## port
+
+#define PORT(port) PORT_(port)
+#define DDR(port)  DDR_(port)
+#define PIN(port)  PIN_(port)
 //=================================================================
 // LCD commands
 //=================================================================
