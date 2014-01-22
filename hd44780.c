@@ -63,8 +63,8 @@ void lcdSendChar(unsigned char charToSend)
 void lcdInit(void)
 {
 	unsigned char cnt;
-	DDR(LCD_CONTROL_PORT) |= LCD_E | LCD_RS | LCD_RS;
-	DDR(LCD_DATA_PORT) |= LCD_DATA_MASK;
+//	DDR(LCD_CONTROL_PORT) |= LCD_E | LCD_RW | LCD_RS;
+//	DDR(LCD_DATA_PORT) |= LCD_DATA_MASK;
 	_delay_ms(15);
 
 	PORT(LCD_CONTROL_PORT) &= ~(LCD_E | LCD_RW | LCD_RS);
@@ -72,7 +72,7 @@ void lcdInit(void)
 	{
 		PORT(LCD_CONTROL_PORT) |= LCD_E;
 		PORT(LCD_DATA_PORT) &= ~LCD_DATA_MASK;
-		PORT(LCD_DATA_PORT) |= (0x02<<4);
+		PORT(LCD_DATA_PORT) |= (0x03<<4);
 		PORT(LCD_CONTROL_PORT) &= ~LCD_E;
 		_delay_ms (5);
 	}

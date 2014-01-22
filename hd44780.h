@@ -15,7 +15,7 @@
 #define	LCD_DATA_PORT B
 #define LCD_DATA_MASK 0xf0
 //=================================================================
-// other needed definitions
+// other needed definitions for working macros
 //=================================================================
 #define PORT_(port) PORT ## port
 #define DDR_(port)  DDR  ## port
