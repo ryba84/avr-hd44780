@@ -36,8 +36,8 @@ void lcdSend(unsigned char dataToSend)
 {
 	DDR(LCD_DATA_PORT) |= LCD_DATA_MASK;
 	PORT(LCD_CONTROL_PORT) &= ~LCD_RW;
-	lcdSendNibble (dataToSend & LCD_DATA_MASK);
 	lcdSendNibble ((dataToSend << 4) & LCD_DATA_MASK);
+	lcdSendNibble (dataToSend & LCD_DATA_MASK);
 }
 
 void lcdSendNibble(unsigned char data)
