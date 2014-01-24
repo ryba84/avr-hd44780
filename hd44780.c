@@ -38,6 +38,7 @@ unsigned char lcdReadNibble(void)
 {
 	unsigned char inNibble;
 	PORT(LCD_CONTROL_PORT) |= LCD_E;
+	asm volatile ("nop"); // without this doesn't working with 8Mhz AVR
 	inNibble = (PIN(LCD_DATA_PORT) & LCD_DATA_MASK);
 	PORT(LCD_CONTROL_PORT) &= ~LCD_E;
 	return inNibble;

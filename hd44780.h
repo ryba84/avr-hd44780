@@ -44,10 +44,10 @@
 	#define interface8bit		0x10
 	#define display2lines		0x08
 	#define font5x11			0x04
-#define lcdBusyFlag				0x80
 #define setDdramAddress			0x80
 	#define firstLine			0x00
 	#define secondLine			0x40
+#define lcdBusyFlag				0x80
 //=================================================================
 // functions
 //=================================================================
