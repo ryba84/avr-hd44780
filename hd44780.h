@@ -5,9 +5,13 @@
 //=================================================================
 #include <avr/io.h>
 #include <util/delay.h>
-//=================================================================
-// port & pin config
-//=================================================================
+//==================================================================
+// In this part You can configure Your pins and ports used with LCD.
+// Data port in 4-bit mode must be lower or higher nibble of used
+// port. LCD_DATA_MASK must be set as the used nibble for data port.
+// Pins for LCD control lines must be on one port and must be set
+// in proper lines.
+//==================================================================
 #define LCD_CONTROL_PORT D
 #define LCD_RS (1<<PD5)
 #define LCD_RW (1<<PD6)
