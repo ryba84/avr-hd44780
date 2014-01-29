@@ -1,4 +1,10 @@
+//=================================================================
+// AVR library for hd44780 compatible LCD display
+// ryba.lodz@gmail.com
+// 4-bit with busy flag read
+//=================================================================
 #include <hd44780.h>
+
 // Read BusyFlag
 unsigned char lcdIsBusy(void)
 {
@@ -9,13 +15,15 @@ unsigned char lcdIsBusy(void)
 	}
 	return 0;
 }
-// Read data from RAM
+
+// Read data from LCD RAM
 unsigned char lcdReadData(void)
 {
 	PORT(LCD_CONTROL_PORT) |= LCD_RS;
 	return lcdRead();
 }
-// Read data
+
+// Read byte from LCD
 unsigned char lcdRead(void)
 {
 	unsigned char tmp;
@@ -33,7 +41,8 @@ unsigned char lcdRead(void)
 	}
 	return tmp;
 }
-// Read nibble from data port
+
+// Read nibble from LCD
 unsigned char lcdReadNibble(void)
 {
 	unsigned char inNibble;
@@ -43,19 +52,22 @@ unsigned char lcdReadNibble(void)
 	PORT(LCD_CONTROL_PORT) &= ~LCD_E;
 	return inNibble;
 }
+
 // Send command to LCD
 void lcdSendCommand(unsigned char commandToSend)
 {
 	PORT(LCD_CONTROL_PORT) &= ~LCD_RS;
 	lcdSend(commandToSend);
 }
+
 // Send char to LCD
 void lcdSendChar(unsigned char charToSend)
 {
 	PORT(LCD_CONTROL_PORT) |= LCD_RS;
 	lcdSend(charToSend);
 }
-// Send data to data
+
+// Send data to LCD
 void lcdSend(unsigned char dataToSend)
 {
 	DDR(LCD_DATA_PORT) |= LCD_DATA_MASK;
@@ -71,7 +83,8 @@ void lcdSend(unsigned char dataToSend)
 		lcdSendNibble (dataToSend & LCD_DATA_MASK);
 	}
 }
-// Send nibble to data port
+
+// Send nibble to LCD
 void lcdSendNibble(unsigned char nibbleToSend)
 {
 	PORT(LCD_CONTROL_PORT) |= LCD_E;
@@ -82,7 +95,7 @@ void lcdSendNibble(unsigned char nibbleToSend)
 
 void lcdInit(void)
 {
-	unsigned char cnt;
+	unsigned char cnt = 2;
 	DDR(LCD_CONTROL_PORT) |= LCD_E | LCD_RW | LCD_RS;
 	DDR(LCD_DATA_PORT) |= LCD_DATA_MASK;
 	_delay_ms(15);
@@ -91,29 +104,21 @@ void lcdInit(void)
 	PORT(LCD_DATA_PORT) &= ~LCD_DATA_MASK;
 	if (LCD_DATA_MASK & 0xf0)
 	{
-		for (cnt = 0; cnt < 3; cnt++)
+		do
 		{
-			PORT(LCD_CONTROL_PORT) |= LCD_E;
-			PORT(LCD_DATA_PORT) |= (0x03<<4);
-			PORT(LCD_CONTROL_PORT) &= ~LCD_E;
+			lcdSendNibble(0x03<<4);
 			_delay_ms (5);
-		}
-		PORT(LCD_CONTROL_PORT) |= LCD_E;
-		PORT(LCD_DATA_PORT) |= (0x02<<4);
-		PORT(LCD_CONTROL_PORT) &= ~LCD_E;
+		} while (cnt--);
+		lcdSendNibble(0x02<<4);
 	}
 	else
 	{
-		for (cnt = 0; cnt < 3; cnt++)
-				{
-					PORT(LCD_CONTROL_PORT) |= LCD_E;
-					PORT(LCD_DATA_PORT) |= (0x03);
-					PORT(LCD_CONTROL_PORT) &= ~LCD_E;
-					_delay_ms (5);
-				}
-		PORT(LCD_CONTROL_PORT) |= LCD_E;
-		PORT(LCD_DATA_PORT) |= (0x02);
-		PORT(LCD_CONTROL_PORT) &= ~LCD_E;
+		do
+		{
+			lcdSendNibble(0x03);
+			_delay_ms (5);
+		} while (cnt--);
+		lcdSendNibble(0x02);
 	}
 	_delay_ms(1);
 	lcdSendCommand(functionSet | display2lines);
