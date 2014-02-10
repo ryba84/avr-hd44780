@@ -29,9 +29,9 @@
 	#error Define only one way of cursor move!!
 #endif
 #if !(defined(MODE_4_BIT) || defined(MODE_8_BIT))
-	#error Please define way of cursor move!!
+	#error Please define 4 or 8 bit mode!!
 #elif defined(MODE_4_BIT) && defined(MODE_8_BIT)
-	#error Define only one way of cursor move!!
+	#error Define only one mode 4 or 8 bit!!
 #endif
 
 // Read BusyFlag
@@ -135,6 +135,7 @@ void lcdSendNibble(unsigned char nibbleToSend)
 	PORT(LCD_CONTROL_PORT) |= LCD_E;
 	PORT(LCD_DATA_PORT) &= ~LCD_DATA_MASK;
 	PORT(LCD_DATA_PORT) |= nibbleToSend;
+//	asm volatile ("nop");
 	PORT(LCD_CONTROL_PORT) &= ~LCD_E;
 }
 #endif
@@ -187,11 +188,11 @@ void lcdInit(void)
 	// doesn't work for now
 #endif
 	_delay_ms(1);
-#ifdef TWO_LINES
-	lcdSendCommand(functionSet | display2lines);
-#endif
 #ifdef ONE_LINE
 	lcdSendCommand(functionSet | display1line);
+#endif
+#ifdef TWO_LINES
+	lcdSendCommand(functionSet | display2lines);
 #endif
 #ifdef FOUR_LINES
 	lcdSendCommand(functionSet | display2lines);
@@ -205,6 +206,8 @@ void lcdInit(void)
 	lcdSendCommand(entryModeSet | cursorIncrement);
 #endif
 #ifdef CURSOR_DECREMENT
+	lcdSendCommand(setDdramAddress | endFirstLine);
+	while (lcdIsBusy());
 	lcdSendCommand(entryModeSet | cursorDecrement);
 #endif
 	while (lcdIsBusy());
